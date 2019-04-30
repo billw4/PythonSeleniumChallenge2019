@@ -293,10 +293,15 @@ class Challenge7(unittest.TestCase):
 
         make_names_and_links = dict(zip(make_names, make_links))
         for k, v in make_names_and_links.items():
-            self.driver.get(v)
-            time.sleep(1)
-            self.assertIn(k.lower(), self.driver.title)
-            print(k + " link, '" + v + "' is valid.")
+            try:
+                self.driver.get(v)
+                time.sleep(1)
+                new_url = f"https://www.copart.com/popular/model/{k.lower()}?query={k.lower()}&free"
+                self.assertEqual(new_url, self.driver.current_url)
+                print(k + " link, '" + v + "' is valid.")
+            except Exception:
+                print(k + " link was invalid.")
+                self.driver.save_screenshot("linkException.png")
             self.driver.back()
 
     if __name__ == '__main__':
