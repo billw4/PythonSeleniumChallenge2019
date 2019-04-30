@@ -13,6 +13,7 @@ class Challenge1(unittest.TestCase):
         self.driver.close()
 
     def test_challenge1(self):
+        print("STG Python/Selenium Challenges 2019, Bill Witt\n")
         print("Python Challenge 1:")
         self.driver.get("https://www.google.com")
         self.assertIn("Google", self.driver.title)
