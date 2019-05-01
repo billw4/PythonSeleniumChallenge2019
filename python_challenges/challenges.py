@@ -292,15 +292,15 @@ class Challenge7(unittest.TestCase):
             make_links.append(elem.get_attribute("href"))
 
         make_names_and_links = dict(zip(make_names, make_links))
-        for k, v in make_names_and_links.items():
+        for name, link in make_names_and_links.items():
             try:
-                self.driver.get(v)
+                self.driver.get(link)
                 time.sleep(1)
-                new_url = f"https://www.copart.com/popular/model/{k.lower()}?query={k.lower()}&free"
+                new_url = f"https://www.copart.com/popular/model/{name.lower()}?query={name.lower()}&free"
                 self.assertEqual(new_url, self.driver.current_url)
-                print(k + " link, '" + v + "' is valid.")
+                print(name + " link, '" + link + "' is valid.")
             except Exception:
-                print(k + " link was invalid.")
+                print(name + " link was invalid.")
                 self.driver.save_screenshot("linkException.png")
             self.driver.back()
 
