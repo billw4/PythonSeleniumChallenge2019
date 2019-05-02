@@ -3,6 +3,7 @@ import unittest
 import json
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+from json.decoder import JSONDecodeError
 
 
 class AdvancedChallenge1(unittest.TestCase):
@@ -65,8 +66,14 @@ class AdvancedChallenge2(unittest.TestCase):
         cookies = {c["name"]: c["value"] for c in self.driver.get_cookies()}
         response = requests.post(url=api_endpoint, data=data, cookies=cookies)
 
-        json_dict = json.loads(response.text)
-        for k, v in json_dict['data']['results']['content'][1].items():
+        result_json = {}
+        try:
+            result_json = json.loads(response.text)
+            print("Search result JSON validated, proceeding to scan objects to determine their type.")
+        except JSONDecodeError:
+            print("Failure: Search response JSON is invalid.")
+
+        for k, v in result_json['data']['results']['content'][1].items():
             print("Variable: " + k + ", Type: " + str(type(v).__name__))
 
     if __name__ == '__main__':
