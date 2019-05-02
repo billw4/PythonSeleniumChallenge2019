@@ -228,7 +228,7 @@ class Challenge6(unittest.TestCase):
 
     def setUp(self):
         self.driver = webdriver.Chrome("../chromedriver.exe")
-        self.driver.implicitly_wait(100)
+        self.driver.implicitly_wait(10)
 
     def tearDown(self):
         self.driver.close()
