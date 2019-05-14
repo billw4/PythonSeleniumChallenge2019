@@ -310,9 +310,10 @@ class Challenge7(unittest.TestCase):
                 time.sleep(1)
                 new_url = ""
                 if str(link).__contains__("model"):
-                    new_url = f"https://www.copart.com/popular/model/{name.lower()}?query={name.lower()}&free"
+                    # new_url = f"https://www.copart.com/popular/model/{name.lower()}?query={name.lower()}&free"
+                    new_url = "https://www.copart.com/popular/model/%s?query=%s&free" % (name.lower(), name.lower())
                 elif str(link).__contains__("make"):
-                    new_url = f"https://www.copart.com/popular/make/{name.lower()}?query={name.lower()}&free"
+                    new_url = "https://www.copart.com/popular/make/%s?query=%s&free" % (name.lower(), name.lower())
                 time.sleep(1)
                 self.assertEqual(new_url, self.driver.current_url)
                 print(name + " link, '" + link + "' is valid.")
