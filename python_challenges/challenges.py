@@ -14,7 +14,7 @@ class Challenge1(unittest.TestCase):
 
     def test_challenge1(self):
         print("STG Python/Selenium Challenges 2019, Bill Witt\n")
-        print("Python Challenge 1:")
+        print("Python Challenge 1: Quick Start")
         self.driver.get("https://www.google.com")
         self.assertIn("Google", self.driver.title)
         print("Titles match.")
@@ -33,7 +33,7 @@ class Challenge2(unittest.TestCase):
         self.driver.close()
 
     def test_challenge2(self):
-        print("\nPython Challenge 2:")
+        print("\nPython Challenge 2: Asserts")
         self.driver.get("https://www.copart.com")
         self.assertIn("Auto Auction", self.driver.title)
         types_link = self.driver.find_element_by_link_text("Types")
@@ -68,7 +68,7 @@ class Challenge3(unittest.TestCase):
         self.driver.close()
 
     def test_challenge3(self):
-        print("\nPython Challenge 3")
+        print("\nPython Challenge 3: Loops")
         self.driver.get("https://www.copart.com")
         self.assertIn("Auto Auction", self.driver.title)
         popular_models = self.driver.find_elements_by_xpath("//a[contains(@href,'popular/model')]")
@@ -148,7 +148,7 @@ class Challenge4(unittest.TestCase):
                 return ones[first] + " thousand " + ones[second] + " hundred and " + tens[third] + "-" + ones[fourth]
 
     def test_challenge4(self):
-        print("\nPython Challenge 4")
+        print("\nPython Challenge 4: Operators and Functions")
         fib = 12
         for i in range(0, fib):
             f = self.get_fibonacci(i)
@@ -169,7 +169,7 @@ class Challenge5(unittest.TestCase):
         self.driver.close()
 
     def test_challenge5(self):
-        print("\nPython Challenge 5:")
+        print("\nPython Challenge 5: If/Else/Switch")
         self.driver.get("https://www.copart.com")
         self.assertIn("Auto Auction", self.driver.title)
 
@@ -234,7 +234,7 @@ class Challenge6(unittest.TestCase):
         self.driver.close()
 
     def test_challenge6(self):
-        print("\nPython Challenge 6:")
+        print("\nPython Challenge 6: Error Handling")
         self.driver.get("https://www.copart.com")
         self.assertIn("Auto Auction", self.driver.title)
         self.driver.maximize_window()
@@ -276,31 +276,49 @@ class Challenge7(unittest.TestCase):
         self.driver.close()
 
     def test_challenge7(self):
-        print("\nPython Challenge 7:")
+        print("\nPython Challenge 7: Array/Dictionary")
         self.driver.get("https://www.copart.com")
         self.assertIn("Auto Auction", self.driver.title)
         self.driver.maximize_window()
 
-        makes = self.driver.find_elements_by_xpath("//div[@ng-if='popularSearches']//a")
+        models = self.driver.find_elements_by_xpath("//div[@ng-if='popularSearches']//a[contains(@href,'model')]")
+        makes = self.driver.find_elements_by_xpath("//div[@ng-if='popularSearches']//a[contains(@href,'make')]")
+
+        model_names = []
+        for name in models:
+            model_names.append(name.text)
 
         make_names = []
-        for elem in makes:
-            make_names.append(elem.text)
+        for name in makes:
+            make_names.append(name.text)
+
+        model_links = []
+        for link in models:
+            model_links.append(link.get_attribute("href"))
 
         make_links = []
-        for elem in makes:
-            make_links.append(elem.get_attribute("href"))
+        for link in makes:
+            make_links.append(link.get_attribute("href"))
 
+        model_names_and_links = dict(zip(model_names, model_links))
         make_names_and_links = dict(zip(make_names, make_links))
-        for name, link in make_names_and_links.items():
+        names_and_links = {**model_names_and_links, ** make_names_and_links}
+
+        for name, link in names_and_links.items():
             try:
                 self.driver.get(link)
                 time.sleep(1)
-                new_url = f"https://www.copart.com/popular/model/{name.lower()}?query={name.lower()}&free"
+                new_url = ""
+                if str(link).__contains__("model"):
+                    new_url = f"https://www.copart.com/popular/model/{name.lower()}?query={name.lower()}&free"
+                elif str(link).__contains__("make"):
+                    new_url = f"https://www.copart.com/popular/make/{name.lower()}?query={name.lower()}&free"
+                time.sleep(1)
                 self.assertEqual(new_url, self.driver.current_url)
                 print(name + " link, '" + link + "' is valid.")
-            except Exception:
+            except Exception as e:
                 print(name + " link was invalid.")
+                print("Error:" + str(e))
                 self.driver.save_screenshot("linkException.png")
             self.driver.back()
 
